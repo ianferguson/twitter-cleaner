@@ -1,0 +1,28 @@
+language: go
+go:
+- '1.12'
+script:
+  - go vet -v ./...
+  - go test -v ./...
+  - go build -v ./...
+deploy:
+  # lambda deployer options: https://github.com/travis-ci/dpl#lambda
+  provider: lambda
+  function_name: "twitter-cleaner-ingest"
+  region: "us-east-1"
+  role: "arn:aws:iam::867712374939:role/service-role/twitter-cleaner-ingest"
+  runtime: "go1.x"
+  # handle_name+module_name configured so that aws will pick it up as `././twitter-cleaner`
+  # trick lifted from: https://github.com/go-spatial/jivan/blob/5bf0b77fb57f1c2d7d833070d046996cc747b5f6/.travis.yml#L73
+  handler_name: "/twitter-cleaner"
+  module_name: "./"
+  zip: "twitter-cleaner"
+  memory_size: 128
+  # TODO: User: arn:aws:iam::867712374939:user/travis-ci is not authorized to perform: lambda:TagResource on resource: arn:aws:lambda:us-east-1:867712374939:function:twitter-cleaner-ingest (Aws::Lambda::Errors::AccessDeniedException)
+  # function_tags:
+    # - app=twitter-cleaner
+    # - managed=travis
+notifications:
+  email: false
+  slack:
+    secure: dfawjMNg4fcUd9nOiuE3rtTl47B/GRTFaxiM9kAIDkUagYc6PuyElVM51ugap+przZ4zeW0AL03SFzkuSPNJOv7XztHoGfpF3bdhF5Rp1pi1EXAB2oWmcUjymVe/MK9LwT5LTTEkKwUC9QpU59sR/m87ZLkf9YmzOJnVMYmVm+swdZISr7ggAV9N2F4o5lbuV7odrLCEkLFiFJfYJ8g9OxS1yf0JCrdG8Sv4JVLIL8vxDf9/LL6oAbJFFQzqEPlDmcA6KxHHtG7L3yIOR5G5bz4q0TxHUuOOaxNYw9tnetRlv+FR2uUXPT3bUFL2FF4jWjev0Ks+tRl8d7j3vJ4JXjO8rXsy+on1cmz5lmynk2ymPkCR8PFT+lObliBtL+oM1kiTvv48pMCBrk5UigFq7JnDh3j+zL9coYGAzxXzw0dULhjDP9KhHvpCA2Fn5YomBRsDgPFelv+Z8Jk3unqKa0FFduoLJi6S32kdLfW3fT1OV0yZPZ5YjFERpWJABCGreR/DE2XOO+R63qETjt+F3b+hMR3KiF0DRiYUNHMncmAZfGWMNWPNZhsSWZhwisEGB2ziuwQLfoVEKRSV6Qn5hmxtnbu5k35ZnfYpuTfcN1FHz7NGRfwteUKyLhabxu8lK8iQT8ZGDIiu39Wkr9g7IBcGJktn7JOK2CH6KYmKOb0=
