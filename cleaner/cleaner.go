@@ -23,7 +23,7 @@ func New() (*cleaner, error) {
 }
 
 func (cleaner *cleaner) getTweets() ([]anaconda.Tweet, error) {
-	search, err := cleaner.client.GetSearch("ianwords", nil)
+	search, err := cleaner.client.GetSearch("from:ianwords", nil)
 	if err != nil {
 		return nil, err
 	}

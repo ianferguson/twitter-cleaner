@@ -1,8 +1,8 @@
 package cleaner
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestThatTweetsCanBeRetrieved(t *testing.T) {
@@ -17,7 +17,11 @@ func TestThatTweetsCanBeRetrieved(t *testing.T) {
 	}
 
 	for _, tweet := range tweets {
-		fmt.Println(tweet.Text)
+		fmt.Printf("%s: %s\n", tweet.User.Name, tweet.Text)
 	}
+	t.Error("not yet implemented")
+}
+
+func TestThatTweetsOlderThan30DaysWithoutEngagementsAreRemoved {
 	t.Error("not yet implemented")
 }
