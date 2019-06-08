@@ -1,4 +1,4 @@
-package cleaner
+package twittercleaner
 
 import (
 	"github.com/ChimeraCoder/anaconda"
@@ -22,12 +22,21 @@ func New() (*cleaner, error) {
 	}, nil
 }
 
-func (cleaner *cleaner) getTweets() ([]anaconda.Tweet, error) {
-	search, err := cleaner.client.GetSearch("from:ianwords", nil)
+func (cleaner *cleaner) getTweets() (*[]anaconda.Tweet, error) {
+
+	search, err := cleaner.client.GetSearch("colonial williamsburg since:2019-06-03 until:2019-06-08", nil)
 	if err != nil {
 		return nil, err
 	}
-	return search.Statuses, nil
+
+	tweets := []anaconda.Tweet{}
+	for ; len(search.Statuses) > 0; {
+		tweets = append(tweets, search.Statuses...)
+		fmt.Printf("retrieving tweets, %d found so far\n", len(tweets))
+		search, err = search.GetNext(cleaner.client)
+		fmt.Printf("found %d more tweets\n", len(search.Statuses))
+	}
+	return &tweets, nil
 }
 
 func client() (*anaconda.TwitterApi, error) {

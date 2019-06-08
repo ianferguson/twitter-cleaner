@@ -1,4 +1,4 @@
-package cleaner
+package twittercleaner
 
 import (
 	"fmt"
@@ -16,12 +16,12 @@ func TestThatTweetsCanBeRetrieved(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	for _, tweet := range tweets {
+	for _, tweet := range *tweets {
 		fmt.Printf("%s: %s\n", tweet.User.Name, tweet.Text)
 	}
 	t.Error("not yet implemented")
 }
 
-func TestThatTweetsOlderThan30DaysWithoutEngagementsAreRemoved {
+func TestThatTweetsOlderThan30DaysWithoutEngagementsAreRemoved(t *testing.T) {
 	t.Error("not yet implemented")
 }
